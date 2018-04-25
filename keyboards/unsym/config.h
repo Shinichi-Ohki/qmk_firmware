@@ -54,7 +54,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define BACKLIGHT_LEVELS 3
 
 #define CATERINA_BOOTLOADER
-//BOOTLOADER = caterina
 
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
