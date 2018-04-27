@@ -32,6 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MATRIX_ROWS 16
 #define MATRIX_COLS 5
 
+#define DEBUG_ACTION
+
 /*
  * Keyboard Matrix Assignments
  *
@@ -47,8 +49,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
-// #define DIODE_DIRECTION ROW2COL
-#define DIODE_DIRECTION COL2ROW
+ #define DIODE_DIRECTION ROW2COL
+//#define DIODE_DIRECTION COL2ROW
 
 // #define BACKLIGHT_PIN B7
 // #define BACKLIGHT_BREATHING
