@@ -21,17 +21,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "config_common.h"
 
 /* USB Device descriptor parameter */
-#define VENDOR_ID       0xFEED
-#define PRODUCT_ID      0x0000
-#define DEVICE_VER      0x0001
-#define MANUFACTURER    You
-#define PRODUCT         unsym
-#define DESCRIPTION     A custom keyboard
+#define VENDOR_ID 0xFEED
+#define PRODUCT_ID 0x0000
+#define DEVICE_VER 0x0001
+#define MANUFACTURER Auxin
+#define PRODUCT unsym
+#define DESCRIPTION A custom keyboard
 
 /* key matrix size */
 #define MATRIX_ROWS 16
 #define MATRIX_COLS 5
-
+#define MASTER_RIGHT
 #define DEBUG_ACTION
 
 /*
@@ -44,12 +44,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *                  ROW2COL = ROW = Anode (+), COL = Cathode (-, marked on diode)
  *
 */
-#define MATRIX_ROW_PINS { F4, F5, F6, F7, B1, B3, B2, B6 }
-#define MATRIX_COL_PINS { D4, C6, D7, E6, B4 }
+#define MATRIX_ROW_PINS                \
+    {                                  \
+        F4, F5, F6, F7, B1, B3, B2, B6 \
+    }
+#define MATRIX_COL_PINS    \
+    {                      \
+        D4, C6, D7, E6, B4 \
+    }
 #define UNUSED_PINS
 
 /* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
- #define DIODE_DIRECTION ROW2COL
+#define DIODE_DIRECTION ROW2COL
 //#define DIODE_DIRECTION COL2ROW
 
 // #define BACKLIGHT_PIN B7
@@ -57,7 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define BACKLIGHT_LEVELS 3
 
 #define CATERINA_BOOTLOADER
-
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCING_DELAY 5
@@ -112,8 +117,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 /* key combination for magic key command */
 #define IS_COMMAND() ( \
-    keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)) \
-)
+    keyboard_report->mods == (MOD_BIT(KC_LSHIFT) | MOD_BIT(KC_RSHIFT)))
 
 /* control how magic key switches layers */
 //#define MAGIC_KEY_SWITCH_LAYER_WITH_FKEYS  true

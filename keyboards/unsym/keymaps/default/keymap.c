@@ -24,7 +24,8 @@
 #define _RAISE 2
 #define _ADJUST 16
 
-enum custom_keycodes {
+enum custom_keycodes
+{
   QWERTY = SAFE_RANGE,
   LOWER,
   RAISE,
@@ -50,25 +51,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-------------------------------------------------------'      `-------------------------------------------------------'
  */
 
-[0] = LAYOUT( /* Base */
-  KC_5   , KC_T   , KC_G   , KC_B   , KC_SPC,  \
-  KC_4   , KC_R   , KC_F   , KC_V   , KC_F13,  \
-  KC_3   , KC_E   , KC_D   , KC_C   ,          \
-  KC_2   , KC_W   , KC_S   , KC_X   , KC_LALT, \
-  KC_1   , KC_Q   , KC_A   , KC_Z   , KC_LGUI, \
-  KC_ESC , KC_TAB , KC_LCTL, KC_LSFT, KC_AJST, \
-  KC_NO  , KC_NO  , KC_NO  , KC_NO  , KC_NO,   \
-  KC_NO  , KC_NO  ,          KC_NO  , KC_NO,   \
-
-  KC_6   , KC_Y   , KC_H   , KC_N   , KC_SPC,  \
-  KC_7   , KC_U   , KC_J   , KC_M   , KC_F14,  \
-  KC_8   , KC_I   , KC_K   , KC_COMM,          \
-  KC_9   , KC_O   , KC_L   , KC_DOT , KC_RALT, \
-  KC_0   , KC_P   , KC_SCLN, KC_SLSH, KC_RGUI, \
-  KC_MINS, KC_LBRC, KC_QUOT, KC_RSFT, KC_LEFT, \
-  KC_EQL , KC_RBRC, KC_ENT , KC_UP  , KC_DOWN, \
-  KC_BSPC, KC_BSLS,          KC_GRV , KC_RGHT \
-),
+    [0] = LAYOUT(/* Base */
+                 KC_5, KC_T, KC_G, KC_B, KC_SPC,
+                 KC_4, KC_R, KC_F, KC_V, KC_F13,
+                 KC_3, KC_E, KC_D, KC_C,
+                 KC_2, KC_W, KC_S, KC_X, KC_LALT,
+                 KC_1, KC_Q, KC_A, KC_Z, KC_LGUI,
+                 KC_ESC, KC_TAB, KC_LCTL, KC_LSFT, KC_AJST,
+                 KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+                 KC_NO, KC_NO, KC_NO, KC_NO,
+                 KC_6, KC_Y, KC_H, KC_N, KC_SPC,
+                 KC_7, KC_U, KC_J, KC_M, KC_F14,
+                 KC_8, KC_I, KC_K, KC_COMM,
+                 KC_9, KC_O, KC_L, KC_DOT, KC_RALT,
+                 KC_0, KC_P, KC_SCLN, KC_SLSH, KC_RGUI,
+                 KC_MINS, KC_LBRC, KC_QUOT, KC_RSFT, KC_LEFT,
+                 KC_EQL, KC_RBRC, KC_ENT, KC_UP, KC_DOWN,
+                 KC_BSPC, KC_BSLS, KC_GRV, KC_RGHT),
 };
 
 const uint16_t PROGMEM fn_actions[] = {
@@ -78,31 +77,35 @@ const uint16_t PROGMEM fn_actions[] = {
 const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
 {
   // MACRODOWN only works in this function
-      switch(id) {
-        case 0:
-          if (record->event.pressed) {
-            register_code(KC_RSFT);
-          } else {
-            unregister_code(KC_RSFT);
-          }
-        break;
-      }
-    return MACRO_NONE;
+  switch (id)
+  {
+  case 0:
+    if (record->event.pressed)
+    {
+      register_code(KC_RSFT);
+    }
+    else
+    {
+      unregister_code(KC_RSFT);
+    }
+    break;
+  }
+  return MACRO_NONE;
 };
 
-
-void matrix_init_user(void) {
-
+void matrix_init_user(void)
+{
 }
 
-void matrix_scan_user(void) {
-
+void matrix_scan_user(void)
+{
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_user(uint16_t keycode, keyrecord_t *record)
+{
   return true;
 }
 
-void led_set_user(uint8_t usb_led) {
-
+void led_set_user(uint8_t usb_led)
+{
 }
