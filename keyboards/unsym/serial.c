@@ -21,70 +21,73 @@
 uint8_t volatile serial_slave_buffer[SERIAL_SLAVE_BUFFER_LENGTH] = {0};
 uint8_t volatile serial_master_buffer[SERIAL_MASTER_BUFFER_LENGTH] = {0};
 
-#define SLAVE_DATA_CORRUPT (1<<0)
+#define SLAVE_DATA_CORRUPT (1 << 0)
 volatile uint8_t status = 0;
 
-inline static
-void serial_delay(void) {
+inline static void serial_delay(void)
+{
   _delay_us(SERIAL_DELAY);
 }
 
-inline static
-void serial_output(void) {
+inline static void serial_output(void)
+{
   SERIAL_PIN_DDR |= SERIAL_PIN_OUTPUT_MASK;
 }
 
 // make the serial pin an input with pull-up resistor
-inline static
-void serial_input(void) {
-  SERIAL_PIN_DDR  &= ~SERIAL_PIN_INPUT_MASK;
+inline static void serial_input(void)
+{
+  SERIAL_PIN_DDR &= ~SERIAL_PIN_INPUT_MASK;
   SERIAL_PIN_PORT |= SERIAL_PIN_INPUT_MASK;
 }
 
-inline static
-uint8_t serial_read_pin(void) {
+inline static uint8_t serial_read_pin(void)
+{
   return !!(SERIAL_PIN_INPUT & SERIAL_PIN_INPUT_MASK);
 }
 
-inline static
-void serial_low(void) {
-  SERIAL_PIN_PORT &= ~SERIAL_PIN_INPUT_MASK;
+inline static void serial_low(void)
+{
+  //  SERIAL_PIN_PORT &= ~SERIAL_PIN_INPUT_MASK;
   SERIAL_PIN_PORT &= ~SERIAL_PIN_OUTPUT_MASK;
 }
 
-inline static
-void serial_high(void) {
-  SERIAL_PIN_PORT |= SERIAL_PIN_INPUT_MASK;
+inline static void serial_high(void)
+{
+  //  SERIAL_PIN_PORT |= SERIAL_PIN_INPUT_MASK;
   SERIAL_PIN_PORT |= SERIAL_PIN_OUTPUT_MASK;
 }
 
-void serial_master_init(void) {
+void serial_master_init(void)
+{
   serial_output();
   serial_high();
 }
 
-void serial_slave_init(void) {
+void serial_slave_init(void)
+{
   serial_input();
 
-  // Enable INT0
-  EIMSK |= _BV(INT0);
-  // Trigger on falling edge of INT0
-  EICRA &= ~(_BV(ISC00) | _BV(ISC01));
+  // Enable INT2
+  EIMSK |= _BV(INT2);
+  // Trigger on falling edge of INT2
+  EICRA &= ~(_BV(ISC20) | _BV(ISC21));
 }
 
 // Used by the master to synchronize timing with the slave.
-static
-void sync_recv(void) {
+static void sync_recv(void)
+{
   serial_input();
   // This shouldn't hang if the slave disconnects because the
   // serial line will float to high if the slave does disconnect.
-  while (!serial_read_pin());
+  while (!serial_read_pin())
+    ;
   serial_delay();
 }
 
 // Used by the slave to send a synchronization signal to the master.
-static
-void sync_send(void) {
+static void sync_send(void)
+{
   serial_output();
 
   serial_low();
@@ -94,11 +97,12 @@ void sync_send(void) {
 }
 
 // Reads a byte from the serial line
-static
-uint8_t serial_read_byte(void) {
+static uint8_t serial_read_byte(void)
+{
   uint8_t byte = 0;
   serial_input();
-  for ( uint8_t i = 0; i < 8; ++i) {
+  for (uint8_t i = 0; i < 8; ++i)
+  {
     byte = (byte << 1) | serial_read_pin();
     serial_delay();
     _delay_us(1);
@@ -108,14 +112,18 @@ uint8_t serial_read_byte(void) {
 }
 
 // Sends a byte with MSB ordering
-static
-void serial_write_byte(uint8_t data) {
+static void serial_write_byte(uint8_t data)
+{
   uint8_t b = 8;
   serial_output();
-  while( b-- ) {
-    if(data & (1 << b)) {
+  while (b--)
+  {
+    if (data & (1 << b))
+    {
       serial_high();
-    } else {
+    }
+    else
+    {
       serial_low();
     }
     serial_delay();
@@ -123,11 +131,13 @@ void serial_write_byte(uint8_t data) {
 }
 
 // interrupt handle to be used by the slave device
-ISR(SERIAL_PIN_INTERRUPT) {
+ISR(SERIAL_PIN_INTERRUPT)
+{
   sync_send();
 
   uint8_t checksum = 0;
-  for (int i = 0; i < SERIAL_SLAVE_BUFFER_LENGTH; ++i) {
+  for (int i = 0; i < SERIAL_SLAVE_BUFFER_LENGTH; ++i)
+  {
     serial_write_byte(serial_slave_buffer[i]);
     sync_send();
     checksum += serial_slave_buffer[i];
@@ -139,10 +149,11 @@ ISR(SERIAL_PIN_INTERRUPT) {
   serial_delay();
 
   // read the middle of pulses
-  _delay_us(SERIAL_DELAY/2);
+  _delay_us(SERIAL_DELAY / 2);
 
   uint8_t checksum_computed = 0;
-  for (int i = 0; i < SERIAL_MASTER_BUFFER_LENGTH; ++i) {
+  for (int i = 0; i < SERIAL_MASTER_BUFFER_LENGTH; ++i)
+  {
     serial_master_buffer[i] = serial_read_byte();
     sync_send();
     checksum_computed += serial_master_buffer[i];
@@ -152,15 +163,18 @@ ISR(SERIAL_PIN_INTERRUPT) {
 
   serial_input(); // end transaction
 
-  if ( checksum_computed != checksum_received ) {
+  if (checksum_computed != checksum_received)
+  {
     status |= SLAVE_DATA_CORRUPT;
-  } else {
+  }
+  else
+  {
     status &= ~SLAVE_DATA_CORRUPT;
   }
 }
 
-inline
-bool serial_slave_DATA_CORRUPT(void) {
+inline bool serial_slave_DATA_CORRUPT(void)
+{
   return status & SLAVE_DATA_CORRUPT;
 }
 
@@ -170,7 +184,8 @@ bool serial_slave_DATA_CORRUPT(void) {
 // Returns:
 // 0 => no error
 // 1 => slave did not respond
-int serial_update_buffers(void) {
+int serial_update_buffers(void)
+{
   // this code is very time dependent, so we need to disable interrupts
   cli();
 
@@ -185,7 +200,8 @@ int serial_update_buffers(void) {
   _delay_us(SERIAL_DELAY);
 
   // check if the slave is present
-  if (serial_read_pin()) {
+  if (serial_read_pin())
+  {
     // slave failed to pull the line low, assume not present
     sei();
     return 1;
@@ -196,7 +212,8 @@ int serial_update_buffers(void) {
 
   uint8_t checksum_computed = 0;
   // receive data from the slave
-  for (int i = 0; i < SERIAL_SLAVE_BUFFER_LENGTH; ++i) {
+  for (int i = 0; i < SERIAL_SLAVE_BUFFER_LENGTH; ++i)
+  {
     serial_slave_buffer[i] = serial_read_byte();
     sync_recv();
     checksum_computed += serial_slave_buffer[i];
@@ -204,14 +221,16 @@ int serial_update_buffers(void) {
   uint8_t checksum_received = serial_read_byte();
   sync_recv();
 
-  if (checksum_computed != checksum_received) {
+  if (checksum_computed != checksum_received)
+  {
     sei();
     return 1;
   }
 
   uint8_t checksum = 0;
   // send data to the slave
-  for (int i = 0; i < SERIAL_MASTER_BUFFER_LENGTH; ++i) {
+  for (int i = 0; i < SERIAL_MASTER_BUFFER_LENGTH; ++i)
+  {
     serial_write_byte(serial_master_buffer[i]);
     sync_recv();
     checksum += serial_master_buffer[i];

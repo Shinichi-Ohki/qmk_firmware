@@ -295,6 +295,7 @@ uint8_t matrix_scan(void)
 void matrix_slave_scan(void)
 {
     _matrix_scan();
+    MyLED_PIN_PORT |= MyLED_PIN_MASK;
 
     int offset = (isLeftHand) ? 0 : ROWS_PER_HAND;
 
@@ -309,6 +310,7 @@ void matrix_slave_scan(void)
         serial_slave_buffer[i] = matrix[offset + i];
     }
 #endif
+    MyLED_PIN_PORT &= ~MyLED_PIN_MASK;
 }
 
 bool matrix_is_modified(void)

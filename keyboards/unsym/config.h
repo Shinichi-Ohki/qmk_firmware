@@ -31,7 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /* key matrix size */
 #define MATRIX_ROWS 16
 #define MATRIX_COLS 5
-#define MASTER_RIGHT
 #define DEBUG_ACTION
 
 /*
@@ -53,6 +52,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         D4, C6, D7, E6, B4 \
     }
 #define UNUSED_PINS
+
+#define MyLED_PIN_DDR DDRB
+#define MyLED_PIN_PORT PORTB
+#define MyLED_PIN PINB
+#define MyLED_PIN_MASK _BV(PB5)
 
 /* COL2ROW, ROW2COL, or CUSTOM_MATRIX */
 #define DIODE_DIRECTION ROW2COL
