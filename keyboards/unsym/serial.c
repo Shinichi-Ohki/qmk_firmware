@@ -11,6 +11,7 @@
 #include <util/delay.h>
 #include <stdbool.h>
 #include "serial.h"
+#include "debug.h"
 
 #ifndef USE_I2C
 
@@ -58,13 +59,13 @@ inline static void serial_high(void)
   SERIAL_PIN_PORT |= SERIAL_PIN_OUTPUT_MASK;
 }
 
-void serial_master_init(void)
+void serial_slave_init(void)
 {
   serial_output();
   serial_high();
 }
 
-void serial_slave_init(void)
+void serial_master_init(void)
 {
   serial_input();
 
@@ -107,7 +108,7 @@ static uint8_t serial_read_byte(void)
     serial_delay();
     _delay_us(1);
   }
-
+  print_hex8(byte);
   return byte;
 }
 
