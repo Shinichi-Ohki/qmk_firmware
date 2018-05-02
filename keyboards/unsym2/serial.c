@@ -59,13 +59,13 @@ inline static void serial_high(void)
   SERIAL_PIN_PORT |= SERIAL_PIN_OUTPUT_MASK;
 }
 
-void serial_slave_init(void)
+void serial_master_init(void)
 {
   serial_output();
   serial_high();
 }
 
-void serial_master_init(void)
+void serial_slave_init(void)
 {
   serial_input();
 
