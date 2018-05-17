@@ -12,7 +12,6 @@
         "*.c": "c",
         "*.cpp": "cpp",
         "*.hpp": "cpp",
-        "algorithm": "c",
-        "random": "c"
+        "xstddef": "c"
     }
 }
