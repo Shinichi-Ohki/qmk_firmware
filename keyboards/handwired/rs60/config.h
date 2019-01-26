@@ -1,5 +1,5 @@
 /*
-Copyright 2012 Jun Wako <wakojun@gmail.com>
+Copyright 2018 QMK Contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -17,16 +17,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 /* USB Device descriptor parameter */
+#define VENDOR_ID       0xFEED
+#define PRODUCT_ID      0x4260
 #define DEVICE_VER      0x0001
+#define MANUFACTURER    rs
+#define PRODUCT         rs60
+#define DESCRIPTION     Preonic clone based on pro micro
 
 /* key matrix size */
 #define MATRIX_ROWS 5
-#define MATRIX_COLS 15
+#define MATRIX_COLS 12
 
-/* Hadron Ver0 PCB default pin-out */
-#define MATRIX_ROW_PINS { D7, E6, B4, B5, B6 }
-#define MATRIX_COL_PINS { F6, F7, C6, C7, F5, F4, F1, F0, D2, D3, D5, B3, B2, B1, B0 }
-#define UNUSED_PINS
+/* key matrix pins */
+#define MATRIX_ROW_PINS { B5, B6, B4, B2, E6 }
+#define MATRIX_COL_PINS { C6, D4, D0, D1, D2, D3,  F4, F5, F6, F7, B1, B3}
+#define UNUSED_PINS { }
 
+#define QMK_ESC_OUTPUT C6
+#define QMK_ESC_INPUT  B4
+#define QMK_LED        B0
+// #define QMK_SPEAKER    C6
 
+/* COL2ROW or ROW2COL */
+#define DIODE_DIRECTION COL2ROW
 
+/* key combination for command */
+#define IS_COMMAND() ( \
+    false \
+)
