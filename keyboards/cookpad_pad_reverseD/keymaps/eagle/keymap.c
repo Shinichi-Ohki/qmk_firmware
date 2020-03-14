@@ -17,11 +17,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_BASE] = LAYOUT_kc(
         // |----|----|
-        F5, F2,
+        F4, F2,
         // |----|----|
-        F8, F3,
+        LALT, F3,
         // |----|----|
-        DFN1, F4
+        DFN1, F5
         // |----|----|
         ),
 
